@@ -1,0 +1,24 @@
+{
+  "name": "@zentis/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@zentis/db": "workspace:*",
+    "@zentis/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@zentis/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
