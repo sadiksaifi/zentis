@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedShareRouteImport } from './routes/_authenticated/share'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBoardBoardIdRouteImport } from './routes/_authenticated/board/$boardId'
 
@@ -35,6 +36,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedShareRoute = AuthenticatedShareRouteImport.update({
+  id: '/share',
+  path: '/share',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -52,12 +58,14 @@ export interface FileRoutesByFullPath {
   '/health': typeof HealthRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/share': typeof AuthenticatedShareRoute
   '/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
 }
 export interface FileRoutesByTo {
   '/health': typeof HealthRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/share': typeof AuthenticatedShareRoute
   '/': typeof AuthenticatedIndexRoute
   '/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
 }
@@ -67,20 +75,28 @@ export interface FileRoutesById {
   '/health': typeof HealthRoute
   '/login': typeof LoginRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/share': typeof AuthenticatedShareRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/health' | '/login' | '/dashboard' | '/board/$boardId'
+  fullPaths:
+    | '/'
+    | '/health'
+    | '/login'
+    | '/dashboard'
+    | '/share'
+    | '/board/$boardId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/health' | '/login' | '/dashboard' | '/' | '/board/$boardId'
+  to: '/health' | '/login' | '/dashboard' | '/share' | '/' | '/board/$boardId'
   id:
     | '__root__'
     | '/_authenticated'
     | '/health'
     | '/login'
     | '/_authenticated/dashboard'
+    | '/_authenticated/share'
     | '/_authenticated/'
     | '/_authenticated/board/$boardId'
   fileRoutesById: FileRoutesById
@@ -121,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/share': {
+      id: '/_authenticated/share'
+      path: '/share'
+      fullPath: '/share'
+      preLoaderRoute: typeof AuthenticatedShareRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -140,12 +163,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedShareRoute: typeof AuthenticatedShareRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedBoardBoardIdRoute: typeof AuthenticatedBoardBoardIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedShareRoute: AuthenticatedShareRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBoardBoardIdRoute: AuthenticatedBoardBoardIdRoute,
 }

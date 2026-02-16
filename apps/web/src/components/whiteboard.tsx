@@ -8,6 +8,7 @@ import { client } from "@/utils/orpc";
 import { toast } from "sonner";
 import { Plus, FolderOpen, LayoutDashboard } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
+import { SidebarBoardItem } from "@/components/sidebar-board-item";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
 interface BoardSummary {
@@ -199,7 +200,7 @@ export function Whiteboard({
               justifyContent: "center",
             }}
           >
-            <FolderOpen className="size-5" />
+            <FolderOpen className="size-4! aspect-square!"/>
           </Sidebar.Trigger>
         )}
       >
@@ -248,21 +249,13 @@ export function Whiteboard({
             />
             <div className="flex flex-col gap-0.5 overflow-y-auto">
               {boards.map((b) => (
-                <button
+                <SidebarBoardItem
                   key={b.id}
-                  onClick={() => handleBoardClick(b.id)}
-                  className="flex items-center gap-2 rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-[var(--color-surface-mid)]"
-                  style={{
-                    background:
-                      b.id === boardId
-                        ? "var(--color-surface-mid)"
-                        : undefined,
-                    fontWeight: b.id === boardId ? 600 : 400,
-                    color: "var(--color-on-surface)",
-                  }}
-                >
-                  <span className="truncate">{b.title}</span>
-                </button>
+                  board={b}
+                  isActive={b.id === boardId}
+                  onBoardClick={handleBoardClick}
+                  onNavigate={onNavigate}
+                />
               ))}
             </div>
           </div>
