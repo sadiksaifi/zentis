@@ -102,6 +102,7 @@
         "@zentis/db": "workspace:*",
         "@zentis/env": "workspace:*",
         "dotenv": "catalog:",
+        "drizzle-orm": "^0.45.1",
         "nanoid": "^5.1.6",
         "zod": "catalog:",
       },
