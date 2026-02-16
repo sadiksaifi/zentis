@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
+    "@excalidraw/excalidraw": "^0.18.0",
     "@hookform/resolvers": "^5.1.1",
     "@libsql/client": "catalog:",
     "@orpc/client": "catalog:",
@@ -30,6 +31,7 @@
     "dotenv": "catalog:",
     "libsql": "catalog:",
     "lucide-react": "^0.473.0",
+    "nanoid": "^5.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "shadcn": "^3.6.2",
