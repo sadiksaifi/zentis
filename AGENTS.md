@@ -55,6 +55,20 @@ This project includes a `bts.jsonc` configuration file that stores your Better-T
 - Used by the CLI to understand your project structure
 - Safe to delete if not needed
 
+## Skills
+
+This project has skills available in `.claude/skills/` (symlinked from `.agents/skills/`). **You must invoke the relevant skill before starting work** when the task matches a skill's domain. Use the `Skill` tool to invoke them.
+
+| Skill | When to Use |
+|-------|-------------|
+| **tanstack-router** | Implementing routes, file-based routing, route loaders, navigation, or troubleshooting routing issues in `apps/web/` |
+| **hono** | Building or modifying API endpoints, middleware, or server logic in `apps/server/` |
+| **better-auth-best-practices** | Working on authentication — login, signup, sessions, OAuth, or anything in `packages/auth/` |
+| **turborepo** | Modifying `turbo.json`, task pipelines, adding packages, caching, CI config, or monorepo structure |
+| **vercel-react-best-practices** | Writing, reviewing, or refactoring React components — covers performance, re-renders, bundle size, data fetching |
+| **vercel-composition-patterns** | Refactoring components with many boolean props, building compound components, designing reusable component APIs |
+| **web-design-guidelines** | Reviewing UI for accessibility, UX quality, or web interface best practices |
+
 ## Key Points
 
 - This is a Turborepo monorepo using bun workspaces
