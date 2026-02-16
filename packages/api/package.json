@@ -19,6 +19,7 @@
     "@zentis/db": "workspace:*",
     "@zentis/env": "workspace:*",
     "dotenv": "catalog:",
+    "nanoid": "^5.1.6",
     "zod": "catalog:"
   },
   "devDependencies": {
