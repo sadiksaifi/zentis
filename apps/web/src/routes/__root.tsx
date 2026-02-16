@@ -9,7 +9,6 @@ import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useState } from "react";
 
-import { Header } from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { link, orpc } from "@/utils/orpc";
@@ -50,13 +49,7 @@ function RootComponent() {
   return (
     <>
       <HeadContent />
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        disableTransitionOnChange
-        storageKey="vite-ui-theme"
-      >
-        <Header />
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <Outlet />
         <Toaster richColors />
       </ThemeProvider>

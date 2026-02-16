@@ -11,7 +11,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex items-center justify-between border-b px-4 py-2">
+    <header className="flex items-center justify-between px-4 py-2 absolute top-0 left-0 right-0 z-50">
       <span className="text-sm font-semibold">zentis</span>
       <div className="flex items-center gap-2">
         {isPending ? (
