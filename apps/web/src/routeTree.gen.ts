@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as HealthRouteImport } from './routes/health'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedBoardBoardIdRouteImport } from './routes/_authenticated/board/$boardId'
 
 const LoginRoute = LoginRouteImport.update({
@@ -34,6 +35,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedBoardBoardIdRoute =
   AuthenticatedBoardBoardIdRouteImport.update({
     id: '/board/$boardId',
@@ -45,11 +51,13 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/health': typeof HealthRoute
   '/login': typeof LoginRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
 }
 export interface FileRoutesByTo {
   '/health': typeof HealthRoute
   '/login': typeof LoginRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/': typeof AuthenticatedIndexRoute
   '/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
 }
@@ -58,19 +66,21 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/health': typeof HealthRoute
   '/login': typeof LoginRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/board/$boardId': typeof AuthenticatedBoardBoardIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/health' | '/login' | '/board/$boardId'
+  fullPaths: '/' | '/health' | '/login' | '/dashboard' | '/board/$boardId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/health' | '/login' | '/' | '/board/$boardId'
+  to: '/health' | '/login' | '/dashboard' | '/' | '/board/$boardId'
   id:
     | '__root__'
     | '/_authenticated'
     | '/health'
     | '/login'
+    | '/_authenticated/dashboard'
     | '/_authenticated/'
     | '/_authenticated/board/$boardId'
   fileRoutesById: FileRoutesById
@@ -111,6 +121,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/board/$boardId': {
       id: '/_authenticated/board/$boardId'
       path: '/board/$boardId'
@@ -122,11 +139,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedBoardBoardIdRoute: typeof AuthenticatedBoardBoardIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedBoardBoardIdRoute: AuthenticatedBoardBoardIdRoute,
 }

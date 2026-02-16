@@ -1,11 +1,13 @@
-import { Excalidraw, Sidebar } from "@excalidraw/excalidraw";
+import { Excalidraw, MainMenu, Sidebar } from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { useTheme } from "@/components/theme-provider";
 import { client } from "@/utils/orpc";
 import { toast } from "sonner";
-import { Plus, FolderOpen } from "lucide-react";
+import { Plus, FolderOpen, LayoutDashboard } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
 interface BoardSummary {
@@ -36,6 +38,7 @@ export function Whiteboard({
   onNavigate,
 }: WhiteboardProps) {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [excalidrawAPI, setExcalidrawAPI] =
     useState<ExcalidrawImperativeAPI | null>(null);
@@ -185,10 +188,6 @@ export function Whiteboard({
         onChange={handleChange}
         theme={resolvedTheme}
         UIOptions={{
-          canvasActions: {
-            toggleTheme: false,
-            export: false,
-          },
           dockedSidebarBreakpoint: 0,
         }}
         renderTopRightUI={() => (
@@ -204,6 +203,30 @@ export function Whiteboard({
           </Sidebar.Trigger>
         )}
       >
+        <MainMenu>
+          <MainMenu.Item
+            icon={<LayoutDashboard className="size-4" />}
+            onSelect={() => navigate({ to: "/dashboard" })}
+          >
+            Dashboard
+          </MainMenu.Item>
+          <MainMenu.Separator />
+          <MainMenu.DefaultItems.LoadScene />
+          <MainMenu.DefaultItems.Export />
+          <MainMenu.DefaultItems.SaveAsImage />
+          <MainMenu.Separator />
+          <MainMenu.DefaultItems.SearchMenu />
+          <MainMenu.DefaultItems.Help />
+          <MainMenu.DefaultItems.ClearCanvas />
+          <MainMenu.Separator />
+          <MainMenu.ItemCustom>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+              <span>Theme</span>
+              <ModeToggle />
+            </div>
+          </MainMenu.ItemCustom>
+          <MainMenu.DefaultItems.ChangeCanvasBackground />
+        </MainMenu>
         <Sidebar name="files" docked={docked} onDock={setDocked}>
           <Sidebar.Header>Files</Sidebar.Header>
           <div className="flex flex-col gap-1 p-2">
