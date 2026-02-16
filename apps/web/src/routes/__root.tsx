@@ -1,5 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query";
 import type { AppRouterClient } from "@zentis/api/routers/index";
+import type { authClient } from "@/lib/auth-client";
 
 import { createORPCClient } from "@orpc/client";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
@@ -8,6 +9,7 @@ import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useState } from "react";
 
+import { Header } from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { link, orpc } from "@/utils/orpc";
@@ -17,6 +19,7 @@ import "../index.css";
 export interface RouterAppContext {
   orpc: typeof orpc;
   queryClient: QueryClient;
+  auth: typeof authClient;
 }
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
@@ -53,6 +56,7 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
+        <Header />
         <Outlet />
         <Toaster richColors />
       </ThemeProvider>
