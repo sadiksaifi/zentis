@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Whiteboard } from "@/components/whiteboard";
 import { client } from "@/utils/orpc";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/board/$boardId")({
 
 function BoardComponent() {
   const { boardId } = Route.useParams();
+  const navigate = useNavigate();
 
   const {
     data: board,
@@ -19,6 +20,11 @@ function BoardComponent() {
   } = useQuery({
     queryKey: ["board", boardId],
     queryFn: () => client.board.get({ id: boardId }),
+  });
+
+  const { data: boards } = useQuery({
+    queryKey: ["boards"],
+    queryFn: () => client.board.list(),
   });
 
   if (isLoading) {
@@ -44,6 +50,10 @@ function BoardComponent() {
       onTitleChange={(title) => {
         client.board.update({ id: board.id, title });
       }}
+      boards={boards ?? []}
+      onNavigate={(id) =>
+        navigate({ to: "/board/$boardId", params: { boardId: id } })
+      }
     />
   );
 }

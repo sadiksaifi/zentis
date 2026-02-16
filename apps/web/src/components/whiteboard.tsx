@@ -1,11 +1,18 @@
-import { Excalidraw } from "@excalidraw/excalidraw";
+import { Excalidraw, Sidebar } from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
 import { useState, useCallback, useRef, useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useTheme } from "@/components/theme-provider";
 import { client } from "@/utils/orpc";
 import { toast } from "sonner";
+import { Plus, FolderOpen } from "lucide-react";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
+
+interface BoardSummary {
+  id: string;
+  title: string;
+  updatedAt: Date | string;
+}
 
 interface WhiteboardProps {
   boardId: string;
@@ -14,6 +21,8 @@ interface WhiteboardProps {
   initialFiles: string | null;
   title: string;
   onTitleChange: (title: string) => void;
+  boards: BoardSummary[];
+  onNavigate: (boardId: string) => void;
 }
 
 export function Whiteboard({
@@ -23,11 +32,14 @@ export function Whiteboard({
   initialFiles,
   title,
   onTitleChange,
+  boards,
+  onNavigate,
 }: WhiteboardProps) {
   const { theme } = useTheme();
   const queryClient = useQueryClient();
   const [excalidrawAPI, setExcalidrawAPI] =
     useState<ExcalidrawImperativeAPI | null>(null);
+  const [docked, setDocked] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedRef = useRef<string>("");
   const latestStateRef = useRef<{
@@ -65,6 +77,26 @@ export function Whiteboard({
     },
     [boardId, queryClient],
   );
+
+  const flushPendingSave = useCallback(() => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = null;
+    }
+    if (latestStateRef.current) {
+      const state = latestStateRef.current;
+      latestStateRef.current = null;
+      client.board.update({
+        id: boardId,
+        elements: state.elements,
+        appState: state.appState,
+        files: state.files,
+      });
+      queryClient.setQueryData(["board", boardId], (old: any) =>
+        old ? { ...old, ...state } : old,
+      );
+    }
+  }, [boardId, queryClient]);
 
   const handleChange = useCallback(
     (elements: readonly any[], appState: any, files: any) => {
@@ -119,6 +151,26 @@ export function Whiteboard({
     };
   }, [boardId, queryClient]);
 
+  const createBoard = useMutation({
+    mutationFn: () => client.board.create({}),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["boards"] });
+      onNavigate(data.id);
+    },
+    onError: () => {
+      toast.error("Failed to create board");
+    },
+  });
+
+  const handleBoardClick = useCallback(
+    (targetBoardId: string) => {
+      if (targetBoardId === boardId) return;
+      flushPendingSave();
+      onNavigate(targetBoardId);
+    },
+    [boardId, flushPendingSave, onNavigate],
+  );
+
   return (
     <div className="fixed inset-0 z-0">
       <Excalidraw
@@ -137,8 +189,62 @@ export function Whiteboard({
             toggleTheme: false,
             export: false,
           },
+          dockedSidebarBreakpoint: 0,
         }}
-      />
+        renderTopRightUI={() => (
+          <Sidebar.Trigger
+            name="files"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FolderOpen className="size-5" />
+          </Sidebar.Trigger>
+        )}
+      >
+        <Sidebar name="files" docked={docked} onDock={setDocked}>
+          <Sidebar.Header>Files</Sidebar.Header>
+          <div className="flex flex-col gap-1 p-2">
+            <button
+              onClick={() => createBoard.mutate()}
+              disabled={createBoard.isPending}
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--color-surface-mid)]"
+              style={{ color: "var(--color-primary)" }}
+            >
+              <Plus className="size-4" />
+              New board
+            </button>
+            <div
+              className="my-1"
+              style={{
+                height: 1,
+                background: "var(--color-surface-mid)",
+              }}
+            />
+            <div className="flex flex-col gap-0.5 overflow-y-auto">
+              {boards.map((b) => (
+                <button
+                  key={b.id}
+                  onClick={() => handleBoardClick(b.id)}
+                  className="flex items-center gap-2 rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-[var(--color-surface-mid)]"
+                  style={{
+                    background:
+                      b.id === boardId
+                        ? "var(--color-surface-mid)"
+                        : undefined,
+                    fontWeight: b.id === boardId ? 600 : 400,
+                    color: "var(--color-on-surface)",
+                  }}
+                >
+                  <span className="truncate">{b.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </Sidebar>
+      </Excalidraw>
     </div>
   );
 }
