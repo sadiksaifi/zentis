@@ -1,5 +1,10 @@
 import { Header } from "@/components/header";
-import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import {
+  Outlet,
+  createFileRoute,
+  redirect,
+  useMatchRoute,
+} from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async ({ context, location }) => {
@@ -11,10 +16,17 @@ export const Route = createFileRoute("/_authenticated")({
       });
     }
   },
-  component: () => (
+  component: AuthenticatedLayout,
+});
+
+function AuthenticatedLayout() {
+  const matchRoute = useMatchRoute();
+  const isBoardRoute = matchRoute({ to: "/board/$boardId", fuzzy: true });
+
+  return (
     <>
-      <Header />
+      {!isBoardRoute && <Header />}
       <Outlet />
     </>
-  ),
-});
+  );
+}
