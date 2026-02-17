@@ -6,7 +6,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { useTheme } from "@/components/theme-provider";
 import { client } from "@/utils/orpc";
 import { toast } from "sonner";
-import { Plus, FolderOpen, LayoutDashboard } from "lucide-react";
+import { Plus, FolderOpen, LayoutDashboard, LogOut } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 import { ModeToggle } from "@/components/mode-toggle";
 import { SidebarBoardItem } from "@/components/sidebar-board-item";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
@@ -218,6 +219,14 @@ export function Whiteboard({
           <MainMenu.DefaultItems.SearchMenu />
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />
+          <MainMenu.Item
+            icon={<LogOut className="size-4" />}
+            onSelect={() =>
+              authClient.signOut().then(() => navigate({ to: "/" }))
+            }
+          >
+            Sign out
+          </MainMenu.Item>
           <MainMenu.Separator />
           <MainMenu.ItemCustom>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
