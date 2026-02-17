@@ -10,7 +10,7 @@ export const auth = betterAuth({
 
     schema: schema,
   }),
-  trustedOrigins: [env.CORS_ORIGIN],
+  trustedOrigins: async () => [env.CORS_ORIGIN],
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,

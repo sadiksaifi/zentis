@@ -14,10 +14,23 @@ import { logger } from "hono/logger";
 const app = new Hono();
 
 app.use(logger());
+
+app.use(
+  "/api/auth/*",
+  cors({
+    origin: (origin) => (origin === env.CORS_ORIGIN ? origin : ""),
+    allowHeaders: ["Content-Type", "Authorization"],
+    allowMethods: ["POST", "GET", "OPTIONS"],
+    exposeHeaders: ["Content-Length"],
+    maxAge: 600,
+    credentials: true,
+  }),
+);
+
 app.use(
   "/*",
   cors({
-    origin: env.CORS_ORIGIN,
+    origin: (origin) => (origin === env.CORS_ORIGIN ? origin : ""),
     allowMethods: ["GET", "POST", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
     credentials: true,
