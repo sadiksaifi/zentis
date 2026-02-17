@@ -56,7 +56,9 @@ function LoginComponent() {
           onClick={() =>
             authClient.signIn.social({
               provider: "google",
-              callbackURL: redirectTo ?? window.location.origin,
+              callbackURL: redirectTo
+                ? `${window.location.origin}${redirectTo}`
+                : `${window.location.origin}/`,
             })
           }
         >
