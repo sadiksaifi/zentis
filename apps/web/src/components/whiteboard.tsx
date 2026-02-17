@@ -43,7 +43,6 @@ export function Whiteboard({
   const queryClient = useQueryClient();
   const [excalidrawAPI, setExcalidrawAPI] =
     useState<ExcalidrawImperativeAPI | null>(null);
-  const [docked, setDocked] = useState(false);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedRef = useRef<string>("");
   const latestStateRef = useRef<{
@@ -228,7 +227,7 @@ export function Whiteboard({
           </MainMenu.ItemCustom>
           <MainMenu.DefaultItems.ChangeCanvasBackground />
         </MainMenu>
-        <Sidebar name="files" docked={docked} onDock={setDocked}>
+        <Sidebar name="files" docked={true}>
           <Sidebar.Header>Files</Sidebar.Header>
           <div className="flex flex-col gap-1 p-2">
             <button
