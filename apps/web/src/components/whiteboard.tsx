@@ -10,6 +10,7 @@ import { Plus, FolderOpen, LayoutDashboard, LogOut } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { ModeToggle } from "@/components/mode-toggle";
 import { SidebarBoardItem } from "@/components/sidebar-board-item";
+import { BoardTitleEditor } from "@/components/board-title-editor";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
 interface BoardSummary {
@@ -269,6 +270,7 @@ export function Whiteboard({
           </div>
         </Sidebar>
       </Excalidraw>
+      <BoardTitleEditor boardId={boardId} title={title} />
     </div>
   );
 }

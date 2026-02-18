@@ -31,11 +31,7 @@ export const auth = betterAuth({
         enabled: true,
         domain: env.BETTER_AUTH_COOKIE_DOMAIN,
       },
+      useSecureCookies: true,
     }),
-    defaultCookieAttributes: {
-      sameSite: env.BETTER_AUTH_COOKIE_DOMAIN ? "lax" : "none",
-      secure: true,
-      httpOnly: true,
-    },
   },
 });

@@ -126,3 +126,32 @@
     @apply font-sans;
   }
 }
+
+.board-title-editor {
+  position: absolute;
+  top: 1rem;
+  left: calc(1rem + 2.25rem + 0.5rem);
+  z-index: 4;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.board-title-editor > * {
+  pointer-events: auto;
+}
+
+@media (min-device-width: 1921px) {
+  .board-title-editor {
+    top: 1rem;
+    left: calc(1rem + 2.5rem + 0.5rem);
+    height: 2.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .board-title-editor {
+    display: none;
+  }
+}
