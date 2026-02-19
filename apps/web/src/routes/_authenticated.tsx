@@ -1,4 +1,5 @@
 import { Header } from "@/components/header";
+import { CommandMenu } from "@/components/command-menu";
 import {
   Outlet,
   createFileRoute,
@@ -27,6 +28,7 @@ function AuthenticatedLayout() {
     <>
       {!isBoardRoute && <Header />}
       <Outlet />
+      <CommandMenu />
     </>
   );
 }
