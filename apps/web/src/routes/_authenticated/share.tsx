@@ -6,6 +6,9 @@ import { decodeShareData } from "@/lib/share"
 import Loader from "@/components/loader"
 
 export const Route = createFileRoute("/_authenticated/share")({
+  head: () => ({
+    meta: [{ title: "Import Board | Zentis" }],
+  }),
   component: SharePage,
 })
 

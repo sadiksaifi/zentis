@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /login
+Disallow: /dashboard
+Disallow: /board/
+Disallow: /share
+Disallow: /health
+
+Sitemap: https://zentis.sadiksaifi.dev/sitemap.xml

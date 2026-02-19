@@ -6,6 +6,9 @@ import { toast } from "sonner";
 import Loader from "@/components/loader";
 
 export const Route = createFileRoute("/_authenticated/board/$boardId")({
+  head: () => ({
+    meta: [{ title: "Board | Zentis" }],
+  }),
   component: BoardComponent,
 });
 
